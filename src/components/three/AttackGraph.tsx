@@ -10,7 +10,7 @@ import { edgesVertex, edgesFragment } from "./shaders/edges.glsl";
 const ACCENT = new THREE.Color("#b6ff3c");
 const SECONDARY = new THREE.Color("#18e0ff");
 
-const NODE_COUNT = 220;
+const NODE_COUNT = 150;
 const CLOUD_RADIUS = 3.4;
 
 type GraphData = {

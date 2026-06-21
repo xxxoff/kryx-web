@@ -3,37 +3,34 @@
 import { motion } from "motion/react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Reveal from "@/components/ui/Reveal";
-import { COMPARISON } from "@/data/comparison";
-
-const COLS = ["", "Kryx", "Manual pentest", "Classic scanners"];
+import { useT } from "@/lib/i18n";
 
 export default function Comparison() {
+  const t = useT();
+  const cols = [t.comparison.capability, ...t.comparison.cols];
+
   return (
-    <section className="relative mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-36">
+    <section className="relative mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-10 lg:py-28">
       <SectionHeading
-        eyebrow="Comparison"
+        eyebrow={t.comparison.eyebrow}
         title={
           <>
-            Where Kryx{" "}
-            <span className="text-accent">pulls ahead.</span>
+            {t.comparison.title}{" "}
+            <span className="text-accent">{t.comparison.titleAccent}</span>
           </>
         }
-        intro="The speed of automation, the judgement of a human operator, and a false-positive rate that classic scanners can't touch."
-        className="mb-14"
+        intro={t.comparison.intro}
+        className="mb-12 sm:mb-14"
       />
 
-      <Reveal>
+      {/* ---------- desktop / tablet table ---------- */}
+      <Reveal className="hidden sm:block">
         <div className="overflow-hidden rounded-2xl border border-line">
-          {/* header */}
           <div className="grid grid-cols-[1.3fr_1fr_1fr_1fr] bg-bg-1">
-            {COLS.map((c, i) => (
+            {cols.map((c, i) => (
               <div
-                key={c || i}
-                className={`px-4 py-5 sm:px-6 ${
-                  i === 1
-                    ? "relative bg-accent/[0.06]"
-                    : ""
-                }`}
+                key={c}
+                className={`px-4 py-5 sm:px-6 ${i === 1 ? "relative bg-accent/[0.06]" : ""}`}
               >
                 {i === 1 && (
                   <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent" />
@@ -43,14 +40,13 @@ export default function Comparison() {
                     i === 1 ? "text-accent" : i === 0 ? "text-muted" : "text-text"
                   }`}
                 >
-                  {c || "Capability"}
+                  {c}
                 </span>
               </div>
             ))}
           </div>
 
-          {/* rows */}
-          {COMPARISON.map((row, r) => (
+          {t.comparison.rows.map((row, r) => (
             <motion.div
               key={row.label}
               initial={{ opacity: 0 }}
@@ -74,6 +70,42 @@ export default function Comparison() {
           ))}
         </div>
       </Reveal>
+
+      {/* ---------- mobile stacked cards ---------- */}
+      <div className="space-y-3 sm:hidden">
+        {t.comparison.rows.map((row, r) => (
+          <Reveal key={row.label} delay={r * 0.04}>
+            <div className="overflow-hidden rounded-xl border border-line">
+              <div className="border-b border-line bg-bg-1 px-4 py-3 font-mono text-xs uppercase tracking-wide text-muted">
+                {row.label}
+              </div>
+              <div className="flex items-start gap-3 bg-accent/[0.05] px-4 py-3">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                <div>
+                  <div className="font-mono text-[10px] uppercase tracking-widest text-accent">
+                    {t.comparison.cols[0]}
+                  </div>
+                  <div className="text-sm font-medium text-text">{row.kryx}</div>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 divide-x divide-line border-t border-line">
+                <div className="px-4 py-3">
+                  <div className="font-mono text-[10px] uppercase tracking-widest text-muted">
+                    {t.comparison.cols[1]}
+                  </div>
+                  <div className="mt-0.5 text-xs text-muted">{row.manual}</div>
+                </div>
+                <div className="px-4 py-3">
+                  <div className="font-mono text-[10px] uppercase tracking-widest text-muted">
+                    {t.comparison.cols[2]}
+                  </div>
+                  <div className="mt-0.5 text-xs text-muted">{row.scanner}</div>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
     </section>
   );
 }

@@ -1,9 +1,13 @@
-import { SITE, NAV } from "@/data/site";
+"use client";
+
+import { SITE } from "@/data/site";
+import { useT } from "@/lib/i18n";
 
 export default function Footer() {
+  const t = useT();
   return (
     <footer className="relative border-t border-line">
-      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10">
+      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-6 sm:py-16 lg:px-10">
         <div className="flex flex-col justify-between gap-12 md:flex-row">
           {/* brand + status */}
           <div className="max-w-xs">
@@ -17,7 +21,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="mt-4 font-mono text-xs leading-relaxed text-muted">
-              {SITE.tagline}
+              {t.footer.tagline}
             </p>
             <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-line px-3 py-1.5">
               <span className="relative flex h-1.5 w-1.5">
@@ -25,40 +29,39 @@ export default function Footer() {
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
               </span>
               <span className="font-mono text-[10px] uppercase tracking-widest text-muted">
-                {SITE.domain} · {SITE.status}
+                {SITE.domain} · {t.comingSoon}
               </span>
             </div>
           </div>
 
           {/* links */}
-          <div className="grid grid-cols-2 gap-12 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 sm:gap-12">
             <FooterCol
-              title="Platform"
-              links={NAV.map((n) => ({ label: n.label, href: n.href }))}
+              title={t.footer.cols.platform}
+              links={t.nav.items.map((n) => ({ label: n.label, href: n.href }))}
             />
             <FooterCol
-              title="Product"
+              title={t.footer.cols.product}
               links={[
-                { label: "Launch App", href: SITE.appUrl },
-                { label: "Request Access", href: "#waitlist" },
-                { label: "Documentation", href: SITE.github },
+                { label: t.footer.links.launch, href: SITE.appUrl },
+                { label: t.footer.links.request, href: "#waitlist" },
+                { label: t.footer.links.docs, href: SITE.github, external: true },
               ]}
             />
             <FooterCol
-              title="Company"
+              title={t.footer.cols.company}
               links={[
-                { label: "GitHub", href: SITE.github, external: true },
-                { label: "Status", href: "#" },
-                { label: "Security", href: "#" },
+                { label: t.footer.links.github, href: SITE.github, external: true },
+                { label: t.footer.links.status, href: "#" },
+                { label: t.footer.links.security, href: "#" },
               ]}
             />
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-line pt-7 sm:flex-row sm:items-center">
+        <div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-line pt-7 sm:mt-14 sm:flex-row sm:items-center">
           <p className="font-mono text-[11px] text-muted">
-            © {new Date().getFullYear()} {SITE.name}. Authorised security testing
-            only.
+            © {new Date().getFullYear()} {SITE.name}. {t.footer.rights}
           </p>
           <a
             href={SITE.github}

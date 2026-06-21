@@ -2,10 +2,37 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { NAV, SITE } from "@/data/site";
+import { SITE } from "@/data/site";
+import { useLang } from "@/lib/i18n";
+
+function LangToggle() {
+  const { lang, setLang } = useLang();
+  return (
+    <div
+      className="flex items-center rounded-full border border-line p-0.5 font-mono text-[10px] uppercase tracking-widest"
+      role="group"
+      aria-label="Language"
+    >
+      {(["en", "ru"] as const).map((l) => (
+        <button
+          key={l}
+          onClick={() => setLang(l)}
+          data-cursor
+          aria-pressed={lang === l}
+          className={`rounded-full px-2.5 py-1 transition-colors ${
+            lang === l ? "bg-accent text-bg-0" : "text-muted hover:text-text"
+          }`}
+        >
+          {l}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
+  const { t } = useLang();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -23,7 +50,7 @@ export default function Nav() {
         scrolled ? "border-b border-line bg-bg-0/70 backdrop-blur-xl" : ""
       }`}
     >
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-10">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-10">
         <a href="#main" className="group flex items-center gap-2.5" data-cursor>
           <span className="relative grid h-7 w-7 place-items-center">
             <span className="absolute h-2.5 w-2.5 rounded-full bg-accent shadow-[0_0_16px_3px_var(--color-accent)]" />
@@ -35,7 +62,7 @@ export default function Nav() {
         </a>
 
         <ul className="hidden items-center gap-8 md:flex">
-          {NAV.map((item) => (
+          {t.nav.items.map((item) => (
             <li key={item.href}>
               <a
                 href={item.href}
@@ -48,13 +75,16 @@ export default function Nav() {
           ))}
         </ul>
 
-        <a
-          href={SITE.appUrl}
-          data-cursor
-          className="rounded-full border border-line px-4 py-2 font-mono text-xs uppercase tracking-widest text-text transition-colors hover:border-accent/60 hover:text-accent"
-        >
-          Launch App
-        </a>
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <LangToggle />
+          <a
+            href={SITE.appUrl}
+            data-cursor
+            className="hidden rounded-full border border-line px-4 py-2 font-mono text-xs uppercase tracking-widest text-text transition-colors hover:border-accent/60 hover:text-accent sm:inline-block"
+          >
+            {t.nav.launch}
+          </a>
+        </div>
       </nav>
     </motion.header>
   );

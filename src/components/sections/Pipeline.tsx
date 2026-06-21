@@ -8,8 +8,9 @@ import {
   useMotionValueEvent,
   useTransform,
 } from "motion/react";
-import { STAGES, HUNTERS, type Stage } from "@/data/pipeline";
+import { STAGES, HUNTERS } from "@/data/pipeline";
 import { EASE } from "@/lib/motion";
+import { useT } from "@/lib/i18n";
 
 const accentClass = {
   lime: "text-accent",
@@ -26,13 +27,13 @@ const accentDot = {
 export default function Pipeline() {
   const ref = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
+  const t = useT();
 
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"],
   });
 
-  // comet position along the rail
   const railFill = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   useMotionValueEvent(scrollYProgress, "change", (p) => {
@@ -45,24 +46,21 @@ export default function Pipeline() {
       id="pipeline"
       ref={ref}
       className="relative"
-      style={{ height: `${STAGES.length * 100}vh` }}
-      aria-label="The Kryx pipeline"
+      style={{ height: `${STAGES.length * 62}vh` }}
+      aria-label={t.pipeline.eyebrow}
     >
       <div className="sticky top-0 flex h-[100svh] items-center overflow-hidden">
-        {/* faint grid + scanlines */}
         <div className="grid-lines pointer-events-none absolute inset-0 opacity-30" />
 
-        <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-10 px-6 lg:grid-cols-[300px_1fr] lg:gap-16 lg:px-10">
-          {/* ---------- rail ---------- */}
+        <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-8 px-5 sm:px-6 lg:grid-cols-[280px_1fr] lg:gap-16 lg:px-10">
+          {/* ---------- rail (desktop) ---------- */}
           <div className="hidden flex-col lg:flex">
             <span className="eyebrow mb-8 flex items-center gap-3">
               <span className="h-px w-8 bg-accent/60" />
-              The Pipeline
+              {t.pipeline.eyebrow}
             </span>
             <div className="relative flex flex-1 flex-col justify-center">
-              {/* base line */}
               <div className="absolute left-[11px] top-0 h-full w-px bg-line" />
-              {/* progress comet */}
               <motion.div
                 style={{ top: railFill }}
                 className="absolute left-[6px] z-10 h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-accent shadow-[0_0_16px_4px_var(--color-accent)]"
@@ -84,7 +82,7 @@ export default function Pipeline() {
                         i === active ? "text-text" : "text-muted"
                       }`}
                     >
-                      {s.name}
+                      {t.pipeline.stages[i].name}
                     </span>
                   </li>
                 ))}
@@ -92,18 +90,29 @@ export default function Pipeline() {
             </div>
           </div>
 
+          {/* mobile eyebrow + step counter */}
+          <div className="flex items-center justify-between lg:hidden">
+            <span className="eyebrow flex items-center gap-3">
+              <span className="h-px w-8 bg-accent/60" />
+              {t.pipeline.eyebrow}
+            </span>
+            <span className="font-mono text-xs text-muted">
+              {STAGES[active].index} / {STAGES.length.toString().padStart(2, "0")}
+            </span>
+          </div>
+
           {/* ---------- stage panel ---------- */}
-          <div className="relative flex min-h-[60svh] items-center">
+          <div className="relative flex min-h-[58svh] items-start lg:items-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={STAGES[active].id}
                 initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: -16, filter: "blur(6px)" }}
-                transition={{ duration: 0.55, ease: EASE.outExpo }}
+                transition={{ duration: 0.5, ease: EASE.outExpo }}
                 className="w-full"
               >
-                <StagePanel stage={STAGES[active]} />
+                <StagePanel index={active} />
               </motion.div>
             </AnimatePresence>
           </div>
@@ -125,32 +134,35 @@ export default function Pipeline() {
   );
 }
 
-function StagePanel({ stage }: { stage: Stage }) {
+function StagePanel({ index }: { index: number }) {
+  const t = useT();
+  const meta = STAGES[index];
+  const stage = t.pipeline.stages[index];
+
   return (
     <div>
       <div className="flex items-baseline gap-4">
-        <span className="font-mono text-sm text-muted">{stage.index}</span>
-        <span className={`eyebrow ${accentClass[stage.accent]}`}>
+        <span className="font-mono text-sm text-muted">{meta.index}</span>
+        <span className={`eyebrow ${accentClass[meta.accent]}`}>
           {stage.tagline}
         </span>
       </div>
 
-      <h3 className="mt-3 font-display text-[clamp(2.4rem,6vw,4.5rem)] font-semibold leading-none tracking-tight">
+      <h3 className="mt-3 font-display text-[clamp(2rem,7vw,4.5rem)] font-semibold leading-none tracking-tight">
         {stage.name}
       </h3>
 
-      <p className="mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+      <p className="mt-5 max-w-xl text-sm leading-relaxed text-muted sm:mt-6 sm:text-lg">
         {stage.body}
       </p>
 
-      {/* stage-specific visual */}
-      <div className="mt-8">
-        {stage.id === "hunt" ? (
+      <div className="mt-7 sm:mt-8">
+        {meta.id === "hunt" ? (
           <HuntVisual />
-        ) : stage.id === "validate" ? (
+        ) : meta.id === "validate" ? (
           <ValidateVisual />
         ) : (
-          <DetailChips items={stage.detail} dot={accentDot[stage.accent]} />
+          <DetailChips items={stage.detail} dot={accentDot[meta.accent]} />
         )}
       </div>
     </div>
@@ -177,6 +189,7 @@ function DetailChips({ items, dot }: { items: string[]; dot: string }) {
 }
 
 function HuntVisual() {
+  const t = useT();
   return (
     <div className="grid max-w-xl grid-cols-2 gap-2.5 sm:grid-cols-4">
       {HUNTERS.map((h, i) => (
@@ -189,7 +202,7 @@ function HuntVisual() {
         >
           <span className="absolute right-2 top-2 h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
           <span className="block font-mono text-[10px] uppercase tracking-wider text-muted">
-            agent
+            {t.pipeline.agent}
           </span>
           <span className="font-mono text-xs text-text">{h}</span>
         </motion.div>
@@ -198,18 +211,11 @@ function HuntVisual() {
   );
 }
 
-const VALIDATE_ROWS = [
-  { name: "injection /v1/search", ok: true },
-  { name: "cors wildcard + creds", ok: true },
-  { name: "xss /profile", ok: false },
-  { name: "config stack-trace leak", ok: true },
-  { name: "cve outdated component", ok: false },
-];
-
 function ValidateVisual() {
+  const t = useT();
   return (
-    <ul className="max-w-md space-y-2 font-mono text-sm">
-      {VALIDATE_ROWS.map((r, i) => (
+    <ul className="max-w-md space-y-2 font-mono text-xs sm:text-sm">
+      {t.pipeline.validateRows.map((r, i) => (
         <motion.li
           key={r.name}
           initial={{ opacity: 0, x: -12 }}
@@ -218,21 +224,25 @@ function ValidateVisual() {
           className="flex items-center gap-3"
         >
           <span
-            className={`grid h-5 w-5 place-items-center rounded ${
+            className={`grid h-5 w-5 shrink-0 place-items-center rounded ${
               r.ok ? "bg-accent/15 text-accent" : "bg-danger/15 text-danger"
             }`}
           >
             {r.ok ? "✓" : "✕"}
           </span>
-          <span className={r.ok ? "text-text" : "text-muted line-through decoration-danger/70"}>
+          <span
+            className={
+              r.ok ? "text-text" : "text-muted line-through decoration-danger/70"
+            }
+          >
             {r.name}
           </span>
           <span
-            className={`ml-auto text-[10px] uppercase tracking-wider ${
+            className={`ml-auto shrink-0 text-[9px] uppercase tracking-wider sm:text-[10px] ${
               r.ok ? "text-accent" : "text-danger"
             }`}
           >
-            {r.ok ? "confirmed" : "rejected"}
+            {r.ok ? t.pipeline.confirmed : t.pipeline.rejected}
           </span>
         </motion.li>
       ))}

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { SCAN_LOG, type LogKind } from "@/data/terminal-log";
+import { useT } from "@/lib/i18n";
 
 const COLOR: Record<LogKind, string> = {
   sys: "text-accent-2",
@@ -31,6 +32,7 @@ export default function Terminal() {
   const [reduced, setReduced] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const logRef = useRef<HTMLDivElement>(null);
+  const t = useT();
 
   // start when scrolled into view
   useEffect(() => {
@@ -82,18 +84,18 @@ export default function Terminal() {
     <section
       id="terminal"
       ref={sectionRef}
-      className="relative mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-36"
+      className="relative mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-10 lg:py-28"
     >
       <SectionHeading
-        eyebrow="Live Scan"
+        eyebrow={t.terminal.eyebrow}
         title={
           <>
-            Watch the swarm{" "}
-            <span className="text-accent-2">hunt in real time.</span>
+            {t.terminal.title}{" "}
+            <span className="text-accent-2">{t.terminal.titleAccent}</span>
           </>
         }
-        intro="A WebSocket stream from the engine — every tool invocation, every finding, every false positive culled. This is a demonstration capture; data is illustrative."
-        className="mb-12"
+        intro={t.terminal.intro}
+        className="mb-10 sm:mb-12"
       />
 
       <motion.div
@@ -110,21 +112,21 @@ export default function Terminal() {
             <span className="h-3 w-3 rounded-full bg-accent/60" />
             <span className="h-3 w-3 rounded-full bg-accent-2/60" />
           </span>
-          <span className="ml-2 font-mono text-xs text-muted">
+          <span className="ml-2 truncate font-mono text-[11px] text-muted sm:text-xs">
             kryx://scan — demo.acme-corp.example
           </span>
-          <span className="ml-auto flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-muted">
+          <span className="ml-auto flex shrink-0 items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-muted">
             <span
               className={`h-1.5 w-1.5 rounded-full ${done ? "bg-muted" : "animate-pulse bg-danger"}`}
             />
-            {done ? "complete" : "live"}
+            {done ? t.terminal.complete : t.terminal.live}
           </span>
         </div>
 
         {/* progress bar */}
         <div className="flex items-center gap-3 border-b border-line px-5 py-2.5">
           <span className="font-mono text-[10px] uppercase tracking-widest text-muted">
-            pipeline
+            {t.terminal.pipeline}
           </span>
           <div className="h-1 flex-1 overflow-hidden rounded-full bg-bg-2">
             <motion.div
@@ -141,7 +143,7 @@ export default function Terminal() {
         {/* log body */}
         <div
           ref={logRef}
-          className="h-[420px] overflow-y-auto px-5 py-4 font-mono text-[12.5px] leading-relaxed sm:text-sm"
+          className="h-[340px] overflow-y-auto px-4 py-4 font-mono text-[11.5px] leading-relaxed sm:h-[420px] sm:px-5 sm:text-sm"
         >
           {lines.map((l, i) => (
             <div

@@ -52,7 +52,7 @@ export default function MagneticButton({
   const content = (
     <motion.span
       whileTap={{ scale: 0.96 }}
-      className={`${base} ${variants[variant]} ${className}`}
+      className={`${base} ${variants[variant]} w-full`}
       style={{ transition: "transform 0.35s var(--ease-out-expo)" }}
     >
       {children}
@@ -69,7 +69,7 @@ export default function MagneticButton({
         onMouseLeave={onLeave}
         data-cursor
         {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
-        className="inline-block will-change-transform"
+        className={`inline-block will-change-transform ${className}`}
         style={{ transition: "transform 0.35s var(--ease-out-expo)" }}
       >
         {content}
@@ -85,7 +85,7 @@ export default function MagneticButton({
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       data-cursor
-      className="inline-block will-change-transform"
+      className={`inline-block will-change-transform ${className}`}
       style={{ transition: "transform 0.35s var(--ease-out-expo)" }}
     >
       {content}

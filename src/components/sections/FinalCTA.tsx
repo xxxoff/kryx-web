@@ -5,10 +5,12 @@ import EchoCanvas from "@/components/three/EchoCanvas";
 import WaitlistForm from "@/components/ui/WaitlistForm";
 import Badge from "@/components/ui/Badge";
 import { SITE } from "@/data/site";
+import { useT } from "@/lib/i18n";
 
 export default function FinalCTA() {
+  const t = useT();
   return (
-    <section className="relative overflow-hidden py-32 lg:py-44">
+    <section id="waitlist" className="relative overflow-hidden py-24 sm:py-32 lg:py-40">
       {/* 3D echo backdrop */}
       <div className="absolute inset-0 z-0 opacity-70">
         <EchoCanvas />
@@ -24,7 +26,7 @@ export default function FinalCTA() {
           transition={{ duration: 0.7 }}
         >
           <Badge pulse>
-            {SITE.domain} — {SITE.status}
+            {SITE.domain} — {t.comingSoon}
           </Badge>
         </motion.div>
 
@@ -33,11 +35,11 @@ export default function FinalCTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-          className="mt-8 font-display text-[clamp(2.4rem,7vw,5rem)] font-semibold leading-[0.98] tracking-tight"
+          className="mt-8 font-display text-[clamp(2.1rem,7vw,5rem)] font-semibold leading-[0.98] tracking-tight"
         >
-          Find it first.
+          {t.finalCta.title1}
           <br />
-          <span className="text-accent glow-accent">Before they do.</span>
+          <span className="text-accent glow-accent">{t.finalCta.title2}</span>
         </motion.h2>
 
         <motion.p
@@ -45,10 +47,9 @@ export default function FinalCTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mt-6 max-w-xl text-balance text-base leading-relaxed text-muted sm:text-lg"
+          className="mt-6 max-w-xl text-balance text-sm leading-relaxed text-muted sm:text-lg"
         >
-          Put an autonomous swarm of operators on your attack surface today.
-          Request access to the Kryx private beta.
+          {t.finalCta.sub}
         </motion.p>
 
         <motion.div

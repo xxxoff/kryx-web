@@ -3,30 +3,25 @@
 import SectionHeading from "@/components/ui/SectionHeading";
 import GlassCard from "@/components/ui/GlassCard";
 import Reveal from "@/components/ui/Reveal";
-import { DIFFERENTIATORS } from "@/data/comparison";
+import { useT } from "@/lib/i18n";
 
 export default function WhyKryx() {
+  const t = useT();
   return (
     <section
       id="why"
-      className="relative mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-36"
+      className="relative mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-10 lg:py-28"
     >
       <SectionHeading
-        eyebrow="Why Kryx"
-        title={
-          <>
-            Not a scanner. Not a chatbot.
-            <br />
-            <span className="text-accent">An operator.</span>
-          </>
-        }
-        intro="Four reasons security teams trust what Kryx surfaces — and act on it the same day."
-        className="mb-14"
+        eyebrow={t.why.eyebrow}
+        title={t.why.title}
+        intro={t.why.intro}
+        className="mb-12 sm:mb-14"
       />
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-        {DIFFERENTIATORS.map((d, i) => (
-          <Reveal key={d.id} delay={i * 0.08}>
+        {t.why.items.map((d, i) => (
+          <Reveal key={d.title} delay={i * 0.08}>
             <GlassCard
               tilt
               glow

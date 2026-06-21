@@ -4,6 +4,7 @@ import LenisProvider from "@/components/providers/LenisProvider";
 import MotionProvider from "@/components/providers/MotionProvider";
 import Cursor from "@/components/providers/Cursor";
 import ScrollProgress from "@/components/providers/ScrollProgress";
+import { LanguageProvider } from "@/lib/i18n";
 import "./globals.css";
 
 const SITE = "https://kryx.io";
@@ -61,11 +62,13 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <MotionProvider>
-          <ScrollProgress />
-          <Cursor />
-          <LenisProvider>{children}</LenisProvider>
-        </MotionProvider>
+        <LanguageProvider>
+          <MotionProvider>
+            <ScrollProgress />
+            <Cursor />
+            <LenisProvider>{children}</LenisProvider>
+          </MotionProvider>
+        </LanguageProvider>
       </body>
     </html>
   );
