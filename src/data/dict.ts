@@ -72,6 +72,23 @@ export type Dict = {
     rows: { label: string; kryx: string; manual: string; scanner: string }[];
   };
 
+  pricing: {
+    eyebrow: string;
+    title: string;
+    titleAccent: string;
+    intro: string;
+    popular: string;
+    cta: string;
+    plans: {
+      name: string;
+      price: string;
+      period: string;
+      blurb: string;
+      features: string[];
+      featured?: boolean;
+    }[];
+  };
+
   finalCta: {
     title1: string;
     title2: string;
@@ -111,6 +128,7 @@ const en: Dict = {
       { label: "Live Scan", href: "#terminal" },
       { label: "Why Kryx", href: "#why" },
       { label: "Engine", href: "#engine" },
+      { label: "Pricing", href: "#pricing" },
     ],
     launch: "Launch App",
   },
@@ -189,8 +207,8 @@ const en: Dict = {
       },
       {
         title: "Real tools, real exploitation",
-        desc: "Kryx orchestrates nmap, nuclei, sqlmap, ffuf and more — driving them like an operator would. Not a model hallucinating a scanner it never ran.",
-        metric: "9+",
+        desc: "Kryx orchestrates nmap, nuclei, sqlmap, semgrep and more — driving them like an operator would. Not a model hallucinating a scanner it never ran.",
+        metric: "10+",
         metricLabel: "integrated tools",
       },
       {
@@ -215,12 +233,14 @@ const en: Dict = {
     roles: {
       nmap: "Port & service mapping",
       subfinder: "Passive subdomain discovery",
-      whatweb: "Tech fingerprinting",
       "crt.sh": "Certificate transparency",
-      nuclei: "Templated vuln scanning",
-      ffuf: "Content & param fuzzing",
+      whatweb: "Tech fingerprinting",
+      Playwright: "JS-aware crawl & DOM",
+      nuclei: "Templated CVE / exposure scanning",
       sqlmap: "Injection exploitation",
-      "testssl.sh": "TLS / cipher analysis",
+      "ssl audit": "TLS / cipher analysis",
+      semgrep: "Source code SAST",
+      gitleaks: "Secret scanning",
       "NVD API": "CVE intelligence",
     },
   },
@@ -238,6 +258,55 @@ const en: Dict = {
       { label: "False positives", kryx: "Near-zero — adversarially validated", manual: "Low, but slow", scanner: "High — noise floods triage" },
       { label: "Attack chains", kryx: "APT-grade multi-step paths", manual: "Expert-dependent", scanner: "None — isolated CVEs" },
       { label: "Real exploitation", kryx: "Drives real tools", manual: "Yes", scanner: "Mostly passive checks" },
+    ],
+  },
+  pricing: {
+    eyebrow: "Pricing",
+    title: "From a single target to",
+    titleAccent: "your whole estate.",
+    intro: "Plans scale from one app to your full attack surface. Kryx is in private beta — request access and we'll match you to the right tier.",
+    popular: "Most Popular",
+    cta: "Request Access",
+    plans: [
+      {
+        name: "Recon",
+        price: "$99",
+        period: "/mo",
+        blurb: "Continuous surface mapping for a single target.",
+        features: [
+          "1 target · continuous recon",
+          "Full attack-surface graph",
+          "Weekly autonomous scans",
+          "Markdown reports",
+        ],
+      },
+      {
+        name: "Operator",
+        price: "$499",
+        period: "/mo",
+        blurb: "The full swarm against a growing estate.",
+        featured: true,
+        features: [
+          "Up to 10 targets",
+          "8-agent parallel hunt",
+          "Adversarial validation",
+          "APT-grade attack chains",
+          "Real-time scan stream",
+        ],
+      },
+      {
+        name: "Enterprise",
+        price: "Custom",
+        period: "",
+        blurb: "Unlimited scope, on your infrastructure.",
+        features: [
+          "Unlimited targets",
+          "Self-hosted engine",
+          "Custom hunter agents",
+          "SSO, audit log, SLA",
+          "Dedicated solutions team",
+        ],
+      },
     ],
   },
   finalCta: {
@@ -277,6 +346,7 @@ const ru: Dict = {
       { label: "Живой скан", href: "#terminal" },
       { label: "Почему Kryx", href: "#why" },
       { label: "Движок", href: "#engine" },
+      { label: "Тарифы", href: "#pricing" },
     ],
     launch: "Открыть App",
   },
@@ -355,8 +425,8 @@ const ru: Dict = {
       },
       {
         title: "Реальные тулзы, реальная эксплуатация",
-        desc: "Kryx оркестрирует nmap, nuclei, sqlmap, ffuf и другие — управляя ими как оператор. Это не модель, галлюцинирующая сканер, который она не запускала.",
-        metric: "9+",
+        desc: "Kryx оркестрирует nmap, nuclei, sqlmap, semgrep и другие — управляя ими как оператор. Это не модель, галлюцинирующая сканер, который она не запускала.",
+        metric: "10+",
         metricLabel: "интегрированных тулз",
       },
       {
@@ -381,12 +451,14 @@ const ru: Dict = {
     roles: {
       nmap: "Карта портов и сервисов",
       subfinder: "Пассивный поиск субдоменов",
-      whatweb: "Фингерпринт технологий",
       "crt.sh": "Прозрачность сертификатов",
-      nuclei: "Сканер по шаблонам",
-      ffuf: "Фаззинг контента и параметров",
+      whatweb: "Фингерпринт технологий",
+      Playwright: "JS-краул и DOM",
+      nuclei: "Сканер по шаблонам (CVE/экспозиции)",
       sqlmap: "Эксплуатация инъекций",
-      "testssl.sh": "Анализ TLS / шифров",
+      "ssl audit": "Анализ TLS / шифров",
+      semgrep: "SAST по исходному коду",
+      gitleaks: "Поиск секретов",
       "NVD API": "Разведка по CVE",
     },
   },
@@ -404,6 +476,55 @@ const ru: Dict = {
       { label: "Ложные срабатывания", kryx: "Почти ноль — адверсариальная проверка", manual: "Мало, но медленно", scanner: "Много — шум топит триаж" },
       { label: "Цепочки атак", kryx: "Многошаговые маршруты APT-уровня", manual: "Зависит от эксперта", scanner: "Нет — разрозненные CVE" },
       { label: "Реальная эксплуатация", kryx: "Управляет реальными тулзами", manual: "Да", scanner: "В основном пассивные проверки" },
+    ],
+  },
+  pricing: {
+    eyebrow: "Тарифы",
+    title: "От одной цели до",
+    titleAccent: "всей инфраструктуры.",
+    intro: "Тарифы масштабируются от одного приложения до всей поверхности атаки. Kryx в закрытой бете — запроси доступ, и мы подберём подходящий уровень.",
+    popular: "Популярный",
+    cta: "Запросить доступ",
+    plans: [
+      {
+        name: "Recon",
+        price: "$99",
+        period: "/мес",
+        blurb: "Непрерывное картирование одной цели.",
+        features: [
+          "1 цель · непрерывный recon",
+          "Полный граф поверхности атаки",
+          "Еженедельные автосканы",
+          "Отчёты в markdown",
+        ],
+      },
+      {
+        name: "Operator",
+        price: "$499",
+        period: "/мес",
+        blurb: "Полный рой против растущей инфраструктуры.",
+        featured: true,
+        features: [
+          "До 10 целей",
+          "8 агентов параллельно",
+          "Адверсариальная валидация",
+          "Цепочки атак APT-уровня",
+          "Поток скана в реальном времени",
+        ],
+      },
+      {
+        name: "Enterprise",
+        price: "Custom",
+        period: "",
+        blurb: "Безлимит, на твоей инфраструктуре.",
+        features: [
+          "Безлимит целей",
+          "Self-hosted движок",
+          "Кастомные агенты-хантеры",
+          "SSO, аудит-лог, SLA",
+          "Выделенная команда",
+        ],
+      },
     ],
   },
   finalCta: {
