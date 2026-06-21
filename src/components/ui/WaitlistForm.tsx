@@ -13,15 +13,30 @@ export default function WaitlistForm({ compact = false }: { compact?: boolean })
   const [state, setState] = useState<"idle" | "done" | "error">("idle");
   const t = useT();
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const valid = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
     if (!valid) {
       setState("error");
       return;
     }
-    // TODO: POST to /api/waitlist when the backend is live.
-    setState("done");
+    // Capture the lead via FormSubmit (no backend needed). First submission
+    // triggers a one-time activation email to the owner — confirm it once.
+    try {
+      const res = await fetch("https://formsubmit.co/ajax/d28362242@gmail.com", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          email,
+          _subject: "Kryx — waitlist / access request",
+          _template: "table",
+        }),
+      });
+      if (!res.ok) throw new Error("send failed");
+      setState("done");
+    } catch {
+      setState("error");
+    }
   };
 
   return (
